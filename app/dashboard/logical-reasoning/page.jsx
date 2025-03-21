@@ -8,10 +8,10 @@ const logicalReasoningVideos = [
     title: "Logical Reasoning Video 1",
     url: "https://www.youtube.com/embed/x0WkptLF6oE",
     articles: [
-      { title: "Understanding Logical Reasoning", link: "/path-to-article-1" },
+      { title: "Understanding Logical Reasoning", link: "https://byjus.com/govt-exams/logical-reasoning/" },
     ],
     pdfNotes: [
-      { title: "Logical Reasoning Notes PDF", link: "/path-to-pdf-notes-1" },
+      { title: "Logical Reasoning Notes PDF", link: "https://d5ofvi41ggben.cloudfront.net/2cc61171-aac2-4558-9b32-b6193e322b0b-1571830125681-lr.pdf" },
     ],
   },
   {
@@ -19,10 +19,10 @@ const logicalReasoningVideos = [
     title: "Logical Reasoning Video 2",
     url: "https://www.youtube.com/embed/edEvlh0tqzk",
     articles: [
-      { title: "Advanced Logical Reasoning", link: "/path-to-article-2" },
+      { title: "Advanced Logical Reasoning", link: "https://byjus.com/govt-exams/logical-reasoning/" },
     ],
     pdfNotes: [
-      { title: "Advanced Logical Reasoning PDF", link: "/path-to-pdf-notes-2" },
+      { title: "Advanced Logical Reasoning PDF", link: "https://d5ofvi41ggben.cloudfront.net/2cc61171-aac2-4558-9b32-b6193e322b0b-1571830125681-lr.pdf" },
     ],
   },
 ];
@@ -168,7 +168,7 @@ const LogicalReasoningPage = () => {
             <ul className="list-disc list-inside">
               <li>
                 <a
-                  href="/path-to-practice-questions"
+                  href="https://gnindia.dronacharya.info/Study-Materials/Download/Logical-Reasoning.pdf"
                   className="text-blue-600 hover:underline"
                 >
                   Practice Questions
@@ -176,7 +176,7 @@ const LogicalReasoningPage = () => {
               </li>
               <li>
                 <a
-                  href="/path-to-more-resources"
+                  href="https://www.indiabix.com/logical-reasoning/questions-and-answers/#google_vignette"
                   className="text-blue-600 hover:underline"
                 >
                   Additional Resources

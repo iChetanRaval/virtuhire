@@ -2,29 +2,34 @@
 
 import React, { useState } from "react";
 
-const videos = [
+const logicalReasoningVideos = [
   {
     id: 1,
-    title: "Aptitude Video 1",
-    url: "https://www.youtube.com/embed/ETiRE7N7pEI",
+    title: "DSA Video 1",
+    url: "https://www.youtube.com/embed/J0OvDNmAWNw",
     articles: [
-      { title: "Understanding Aptitude", link: "https://www.indeed.com/career-advice/career-development/what-is-aptitude" },
-      { title: "Aptitude Tests Overview", link: "https://www.practiceaptitudetests.com/what-is-an-aptitude-test/" },
+      { title: "Understanding DSA Concepts", link: "https://drive.google.com/file/d/1QfYg-TkfYlTzC_8vmRshWHGJd4MFMmEA/view" },
     ],
-    pdfNotes: [{ title: "Aptitude Notes PDF", link: "https://d5ofvi41ggben.cloudfront.net/4966d784-a71b-4c11-b31e-801ee59d95c0-1571828515642-quantitative-aptitude.pdf" }],
+    pdfNotes: [
+      { title: "DSA Notes PDF", link: "https://w3.cs.jmu.edu/spragunr/CS240_F12/ConciseNotes.pdf" },
+    ],
   },
   {
     id: 2,
-    title: "Aptitude Video 2",
-    url: "https://www.youtube.com/embed/jzNxXm5twx4",
-    articles: [{ title: "Aptitude Practice Questions", link: "https://www.indiabix.com/aptitude/questions-and-answers/" }],
-    pdfNotes: [{ title: "Aptitude Practice PDF", link: "https://gnindia.dronacharya.info/Study-Materials/Download/General-Aptitude.pdf" }],
+    title: "Web Development Video 2",
+    url: "https://www.youtube.com/embed/iG2jotQo9NI",
+    articles: [
+      { title: "The Ultimate Web Development Roadmap", link: "https://www.browserstack.com/guide/web-development-roadmap" },
+    ],
+    pdfNotes: [
+      { title: "Web Development Project Ideas", link: "https://www.softlogicsys.in/wp-content/uploads/2024/11/Web-Development-Project-Ideas.pdf" },
+    ],
   },
 ];
 
-const AptitudePage = () => {
+const LogicalReasoningPage = () => {
   const [completed, setCompleted] = useState(false);
-  const [notes, setNotes] = useState(Array(videos.length).fill(""));
+  const [notes, setNotes] = useState(Array(logicalReasoningVideos.length).fill(""));
 
   const handleCompletionToggle = () => {
     setCompleted(!completed);
@@ -37,14 +42,14 @@ const AptitudePage = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row p-10 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen">
+    <div className="flex flex-col lg:flex-row p-10 bg-gradient-to-br from-gray-50 to-blue-100 min-h-screen">
       {/* Main Content */}
       <div className="flex-1 pr-10">
         <h1 className="text-4xl font-extrabold text-blue-800 mb-8 text-center lg:text-left">
-          Aptitude Practice
+          Coding / Development Practice
         </h1>
         <div className="space-y-10">
-          {videos.map((video) => (
+          {logicalReasoningVideos.map((video) => (
             <div
               key={video.id}
               className="rounded-lg shadow-lg bg-white p-6 transition-transform transform hover:scale-105"
@@ -150,8 +155,8 @@ const AptitudePage = () => {
               Stay Motivated!
             </h3>
             <p className="text-gray-600">
-              Remember, every step you take brings you closer to mastering your
-              aptitude skills. Practice regularly and track your progress!
+              Consistency is key! Regular practice will sharpen your reasoning
+              skills and boost your confidence.
             </p>
           </div>
 
@@ -163,15 +168,15 @@ const AptitudePage = () => {
             <ul className="list-disc list-inside">
               <li>
                 <a
-                  href="https://www.indiabix.com/aptitude/questions-and-answers/"
+                  href="https://www.naukri.com/code360/library/complete-data-structures-and-algorithms-roadmap-for-placements"
                   className="text-blue-600 hover:underline"
                 >
-                  Practice Questions
+                  DSA Roadmap
                 </a>
               </li>
               <li>
                 <a
-                  href="https://pdf.bankexamstoday.com/raman_files/QT-Cheatsheet.pdf"
+                  href="https://www.byte-by-byte.com/wp-content/uploads/2019/01/50-Coding-Interview-Questions.pdf"
                   className="text-blue-600 hover:underline"
                 >
                   Additional Resources
@@ -185,4 +190,4 @@ const AptitudePage = () => {
   );
 };
 
-export default AptitudePage;
+export default LogicalReasoningPage;

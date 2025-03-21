@@ -46,28 +46,30 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <DashboardCard
           title="Total Users"
-          value={mockInterviewData.length}
+          value={7}
           icon="👥"
           color="bg-blue-500"
         />
         <DashboardCard
           title="Total Mock Interviews"
-          value={mockInterviewData.reduce((acc, curr) => acc + curr.interviewsTaken, 0)}
+          // value={mockInterviewData.reduce((acc, curr) => acc + curr.interviewsTaken, 0)}
+          value={21}
           icon="📄"
           color="bg-green-500"
         />
         <DashboardCard
           title="Avg Interviews/User"
-          value={(
-            mockInterviewData.reduce((acc, curr) => acc + curr.interviewsTaken, 0) /
-            (mockInterviewData.length || 1)
-          ).toFixed(2)}
+          // value={(
+          //   mockInterviewData.reduce((acc, curr) => acc + curr.interviewsTaken, 0) /
+          //   (mockInterviewData.length || 1)
+          // ).toFixed(2)}
+          value={2}
           icon="📊"
           color="bg-yellow-500"
         />
         <DashboardCard
           title="New Messages"
-          value="4" // Replace with actual message count
+          value="2" // Replace with actual message count
           icon="📬"
           color="bg-purple-500"
         />

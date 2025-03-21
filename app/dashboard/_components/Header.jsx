@@ -106,6 +106,154 @@
 // export default Header;
 
 
+// ===main 27th feb
+
+
+
+// "use client";
+// import { Button } from '@/components/ui/button';
+// import { Input } from '@/components/ui/input';
+// import { UserButton } from '@clerk/nextjs';
+// import Image from 'next/image';
+// import Link from 'next/link';
+// import { usePathname } from 'next/navigation';
+// import React, { useEffect, useState } from 'react';
+
+// function Header() {
+//   const path = usePathname();
+//   const [showPracticeDropdown, setShowPracticeDropdown] = useState(false);
+//   const [showCodingDropdown, setShowCodingDropdown] = useState(false);
+//   const [searchTerm, setSearchTerm] = useState('');
+
+//   useEffect(() => {
+//     console.log(path);
+//   }, [path]);
+
+//   const handleSearch = (e) => {
+//     e.preventDefault();
+//     // Implement search functionality here
+//     console.log('Search term:', searchTerm);
+//   };
+
+//   return (
+//     <div className='flex p-4 items-center justify-between bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 shadow-md'>
+//       <Image src={'/logo.png'} width={110} height={8} alt='logo' />
+
+//       {/* Search Bar */}
+//       <form onSubmit={handleSearch} className="flex items-center w-1/3">
+//         <Input
+//           type="text"
+//           placeholder="Search..."
+//           className="w-full px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary"
+//           value={searchTerm}
+//           onChange={(e) => setSearchTerm(e.target.value)}
+//         />
+//         <Button
+//           type="submit"
+//           className="px-4 py-2 ml-2 bg-primary text-white rounded-r-md hover:bg-primary-dark transition-all"
+//         >
+//           Search
+//         </Button>
+//       </form>
+
+//       <ul className='hidden md:flex gap-6 relative'>
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard">Dashboard</Link>
+//         </li>
+
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/upgrade' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard/upgrade">Upgrade</Link>
+//         </li>
+
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/working' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard/working">How it Works?</Link>
+//         </li>
+
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/about' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard/about">About VirtuHire</Link>
+//         </li>
+
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/contactus' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard/contactus">Contact Us</Link>
+//         </li>
+
+//         {/* Practice Dropdown */}
+//         <li
+//           className="relative"
+//           onMouseEnter={() => setShowPracticeDropdown(true)}
+//           onMouseLeave={() => setShowPracticeDropdown(false)}
+//         >
+//           <span className={`hover:text-primary hover:font-bold cursor-pointer`}>
+//             Practice
+//           </span>
+//           {showPracticeDropdown && (
+//             <ul className="absolute left-0 bg-white shadow-lg rounded-md mt-2 z-10">
+//               <li className="hover:bg-gray-100">
+//                 <Link href="/dashboard/aptitude" className="block px-4 py-2">Aptitude</Link>
+//               </li>
+//               <li
+//                 className="hover:bg-gray-100 relative"
+//                 onMouseEnter={() => setShowCodingDropdown(true)}
+//                 onMouseLeave={() => setShowCodingDropdown(false)}
+//               >
+//                 <span className="block px-4 py-2 cursor-pointer">Coding</span>
+//                 {showCodingDropdown && (
+//                   <ul className="absolute left-full top-0 bg-white shadow-lg rounded-md mt-2 z-10">
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/dsa" className="block px-4 py-2">DSA</Link>
+//                     </li>
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/web-development" className="block px-4 py-2">Web Development</Link>
+//                     </li>
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/android-development" className="block px-4 py-2">Android Development</Link>
+//                     </li>
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/software-development" className="block px-4 py-2">Software Development</Link>
+//                     </li>
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/networking" className="block px-4 py-2">Networking</Link>
+//                     </li>
+//                     <li className="hover:bg-gray-100">
+//                       <Link href="/practice/coding/cloud-engineer" className="block px-4 py-2">Cloud Engineer</Link>
+//                     </li>
+//                   </ul>
+//                 )}
+//               </li>
+//               <li className="hover:bg-gray-100">
+//                 <Link href="/dashboard/logical-reasoning" className="block px-4 py-2">Logical Reasoning</Link>
+//               </li>
+//               <li className="hover:bg-gray-100">
+//                 <Link href="/dashboard/interview-preparation" className="block px-4 py-2">Interview Preparation Communication</Link>
+//               </li>
+//             </ul>
+//           )}
+//         </li>
+
+//         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/resume' && 'text-primary font-bold'}`}>
+//           <Link href="/dashboard/resume">Check Your Resume</Link>
+//         </li>
+
+
+//       </ul>
+//       <UserButton />
+//     </div>
+//   );
+// }
+
+// export default Header;
+
+
+
+
+
+
+
+// trail
+
+
+
+
 "use client";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -113,33 +261,28 @@ import { UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-function Header() {
+function Header({ searchTerm, setSearchTerm }) {
   const path = usePathname();
   const [showPracticeDropdown, setShowPracticeDropdown] = useState(false);
   const [showCodingDropdown, setShowCodingDropdown] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    console.log(path);
-  }, [path]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search functionality here
+    // Trigger search functionality
     console.log('Search term:', searchTerm);
   };
 
   return (
-    <div className='flex p-4 items-center justify-between bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 shadow-md'>
-      <Image src={'/logo.png'} width={110} height={8} alt='logo' />
+    <div className='flex p-3 items-center justify-between bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 shadow-md'>
+      <Image src={'/image1.png'} width={200} height={12} alt='logo' className='ml-3' />
 
       {/* Search Bar */}
-      <form onSubmit={handleSearch} className="flex items-center w-1/3">
+      {/* <form onSubmit={handleSearch} className="flex items-center w-1/3">
         <Input
           type="text"
-          placeholder="Search..."
+          placeholder="Search by job profile..."
           className="w-full px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -150,35 +293,28 @@ function Header() {
         >
           Search
         </Button>
-      </form>
+      </form> */}
 
-      <ul className='hidden md:flex gap-6 relative'>
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard' && 'text-primary font-bold'}`}>
+      <ul className='hidden md:flex gap-8 relative'>
+        {/* ... (rest of the code remains the same) ... */}
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard' && 'text-primary font-bold'}`}>
           <Link href="/dashboard">Dashboard</Link>
         </li>
 
-        {/* <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/question' && 'text-primary font-bold'}`}>
-          <Link href="/dashboard/question">Questions</Link>
-        </li> */}
-
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/upgrade' && 'text-primary font-bold'}`}>
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/upgrade' && 'text-primary font-bold'}`}>
           <Link href="/dashboard/upgrade">Upgrade</Link>
         </li>
 
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/working' && 'text-primary font-bold'}`}>
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/working' && 'text-primary font-bold'}`}>
           <Link href="/dashboard/working">How it Works?</Link>
         </li>
 
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/about' && 'text-primary font-bold'}`}>
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/about' && 'text-primary font-bold'}`}>
           <Link href="/dashboard/about">About VirtuHire</Link>
         </li>
 
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/contactus' && 'text-primary font-bold'}`}>
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/contactus' && 'text-primary font-bold'}`}>
           <Link href="/dashboard/contactus">Contact Us</Link>
-        </li>
-
-        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer ${path === '/dashboard/resume' && 'text-primary font-bold'}`}>
-          <Link href="/dashboard/resume">Check Your Resume</Link>
         </li>
 
         {/* Practice Dropdown */}
@@ -187,52 +323,35 @@ function Header() {
           onMouseEnter={() => setShowPracticeDropdown(true)}
           onMouseLeave={() => setShowPracticeDropdown(false)}
         >
-          <span className={`hover:text-primary hover:font-bold cursor-pointer`}>
+          <span className={`hover:text-primary hover:font-bold cursor-pointer text-lg`}>
             Practice
           </span>
           {showPracticeDropdown && (
             <ul className="absolute left-0 bg-white shadow-lg rounded-md mt-2 z-10">
-              <li className="hover:bg-gray-100">
+              <li className="hover:bg-gray-100 text-lg">
                 <Link href="/dashboard/aptitude" className="block px-4 py-2">Aptitude</Link>
               </li>
-              <li
-                className="hover:bg-gray-100 relative"
-                onMouseEnter={() => setShowCodingDropdown(true)}
-                onMouseLeave={() => setShowCodingDropdown(false)}
-              >
-                <span className="block px-4 py-2 cursor-pointer">Coding</span>
-                {showCodingDropdown && (
-                  <ul className="absolute left-full top-0 bg-white shadow-lg rounded-md mt-2 z-10">
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/dsa" className="block px-4 py-2">DSA</Link>
-                    </li>
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/web-development" className="block px-4 py-2">Web Development</Link>
-                    </li>
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/android-development" className="block px-4 py-2">Android Development</Link>
-                    </li>
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/software-development" className="block px-4 py-2">Software Development</Link>
-                    </li>
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/networking" className="block px-4 py-2">Networking</Link>
-                    </li>
-                    <li className="hover:bg-gray-100">
-                      <Link href="/practice/coding/cloud-engineer" className="block px-4 py-2">Cloud Engineer</Link>
-                    </li>
-                  </ul>
-                )}
+              <li className="hover:bg-gray-100 text-lg">
+                <Link href="/dashboard/coding" className="block px-4 py-2">Coding</Link>
               </li>
-              <li className="hover:bg-gray-100">
+              <li className="hover:bg-gray-100 text-lg">
                 <Link href="/dashboard/logical-reasoning" className="block px-4 py-2">Logical Reasoning</Link>
               </li>
-              <li className="hover:bg-gray-100">
+              <li className="hover:bg-gray-100 text-lg">
                 <Link href="/dashboard/interview-preparation" className="block px-4 py-2">Interview Preparation Communication</Link>
               </li>
             </ul>
           )}
         </li>
+
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/resume' && 'text-primary font-bold'}`}>
+          <Link href="/dashboard/resume">Check Your Resume</Link>
+        </li>
+
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/skillsCheck' && 'text-primary font-bold'}`}>
+          <Link href="/dashboard/skillsCheck">Find Job Profiles</Link>
+        </li>
+
       </ul>
       <UserButton />
     </div>
@@ -240,6 +359,41 @@ function Header() {
 }
 
 export default Header;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,7 +1,6 @@
 // app/admin/layout.jsx
-"use client"
+"use client";
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 export default function AdminLayout({ children }) {
   return (
@@ -18,7 +17,7 @@ export default function AdminLayout({ children }) {
           <NavLink href="/admin/contact-us" label="Contact Messages" icon="📬" />
         </nav>
         <div className="absolute bottom-4 w-full text-center text-gray-400 text-sm">
-          &copy; 2024 VirtuHire
+          &copy; 2025 VirtuHire
         </div>
       </aside>
       <main className="flex-1 p-8 bg-white shadow-inner rounded-tl-lg">
@@ -40,6 +39,3 @@ function NavLink({ href, label, icon }) {
     </Link>
   );
 }
-
-
-

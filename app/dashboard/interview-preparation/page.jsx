@@ -9,10 +9,10 @@ const interviewVideos = [
     url: "https://www.youtube.com/embed/ASj1_wPppFg?si=YFba18cwBB9DOWt1",
 
     articles: [
-      { title: "Mastering Interview Techniques", link: "/path-to-article-1" },
+      { title: "Mastering Interview Techniques", link: "https://www.toastmasters.org/magazine/magazine-issues/2020/may/master-the-art-of-interviewing" },
     ],
     pdfNotes: [
-      { title: "Interview Preparation Notes PDF", link: "/path-to-pdf-notes-1" },
+      { title: "Interview Preparation Notes PDF", link: "https://www.stmarys-ca.edu/sites/default/files/2023-03/Interview%20Preparation_0.pdf" },
     ],
   },
   {
@@ -20,10 +20,10 @@ const interviewVideos = [
     title: "Interview Communication Skills Video",
     url: "https://www.youtube.com/embed/gDN7cJ3Rt80?si=KNRw8__M5xoEjs0J",
     articles: [
-      { title: "Effective Communication in Interviews", link: "/path-to-article-2" },
+      { title: "Effective Communication in Interviews", link: "https://www.malone.edu/alumni/resources/alumni-career-services/interview-preparation/communication-during-interview/" },
     ],
     pdfNotes: [
-      { title: "Interview Communication Skills PDF", link: "/path-to-pdf-notes-2" },
+      { title: "Interview Communication Skills PDF", link: "https://www.fip.org/files/ypg/Project%20Documents/career%20development/CareerDevelopment-Interviews.pdf" },
     ],
   },
 ];
@@ -167,7 +167,7 @@ const InterviewPage = () => {
             <ul className="list-disc list-inside">
               <li>
                 <a
-                  href="/path-to-interview-questions"
+                  href="https://www.themuse.com/advice/interview-questions-and-answers"
                   className="text-yellow-600 hover:underline"
                 >
                   Common Interview Questions
@@ -175,7 +175,7 @@ const InterviewPage = () => {
               </li>
               <li>
                 <a
-                  href="/path-to-communication-tips"
+                  href="https://www.fip.org/files/ypg/Project%20Documents/career%20development/CareerDevelopment-Interviews.pdf"
                   className="text-yellow-600 hover:underline"
                 >
                   Communication Tips for Interviews

@@ -131,6 +131,7 @@ function InterviewItemCard({ interview, onDelete }) {
         <p className="text-sm text-gray-700 mt-2">{interview?.jobExperience} Years of Experience</p>
         {/* <p className="text-xs text-gray-500 mt-1">Created At: {new Date(interview?.createdAt).toLocaleDateString()}</p> */}
         <p className="text-xs text-gray-500 mt-1">Created At: {interview?.createdAt}</p>
+        <p className="text-xs text-gray-500 mt-1">Creation Time: {interview?.timeOfCreation}</p>
 
         <div className="flex justify-between mt-4 gap-4">
           {/* Feedback Button */}

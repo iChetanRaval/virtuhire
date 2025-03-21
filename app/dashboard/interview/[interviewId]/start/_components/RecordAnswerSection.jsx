@@ -345,9 +345,389 @@
 
 
 
+// "use client";
+// import { Button } from '@/components/ui/button';
+// import Image from 'next/image';
+// import React, { useEffect, useState, useRef } from 'react';
+// import Webcam from 'react-webcam';
+// import useSpeechToText from 'react-hook-speech-to-text';
+// import { Mic } from 'lucide-react';
+// import { toast } from 'sonner';
+// import { chatSession } from '@/utils/GeminiAiModel';
+// import { useUser } from '@clerk/nextjs';
+// import moment from 'moment/moment';
+// import { UserAnswer } from '@/utils/schema';
+// import { db } from '@/utils/db';
+
+// function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, interviewData }) {
+//   const [userAnswer, setUserAnswer] = useState('');
+//   const [typedAnswer, setTypedAnswer] = useState('');
+//   const { user } = useUser();
+//   const [loading, setLoading] = useState(false);
+//   const [recordingStarted, setRecordingStarted] = useState(false);
+//   const isSpeaking = useRef(false); // Track if question is currently being spoken
+
+//   const {
+//     error,
+//     interimResult,
+//     isRecording,
+//     results,
+//     startSpeechToText,
+//     stopSpeechToText,
+//     setResults,
+//   } = useSpeechToText({
+//     continuous: true,
+//     useLegacyResults: false,
+//   });
+
+//   const speakQuestion = (text) => {
+//     if ('speechSynthesis' in window && !isSpeaking.current) {
+//       const utterance = new SpeechSynthesisUtterance(text);
+//       isSpeaking.current = true;
+
+//       utterance.onend = () => {
+//         isSpeaking.current = false;
+//       };
+
+//       window.speechSynthesis.speak(utterance);
+//     } else if (!('speechSynthesis' in window)) {
+//       toast.error('Text-to-speech is not supported in your browser.');
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (mockInterviewQuestion && mockInterviewQuestion.length > 0) {
+//       const currentQuestion = mockInterviewQuestion[activeQuestionIndex]?.question;
+//       if (currentQuestion) {
+//         speakQuestion(currentQuestion);
+//       }
+//     }
+//   }, [activeQuestionIndex, mockInterviewQuestion]);
+
+//   useEffect(() => {
+//     console.log("Speech-to-text results:", results);
+//     if (results.length > 0) {
+//       const newText = results.map(result => result.transcript).join(' ');
+//       setUserAnswer((prev) => prev + ' ' + newText);
+//       setResults([]);
+//     }
+//   }, [results]);
+
+//   const StartStopRecording = () => {
+//     if (isRecording || recordingStarted) {
+//       setLoading(true);
+//       stopSpeechToText();
+//       setRecordingStarted(false);
+//       UpdateUserAnswer();
+//     } else if (!isRecording && !loading && !recordingStarted) {
+//       setUserAnswer('');
+//       startSpeechToText();
+//       setRecordingStarted(true);
+//     }
+//   };
+
+//   const videoFile = "/Avtar_Video.mp4";
+
+//   const UpdateUserAnswer = async () => {
+//     setLoading(true);
+//     const fullAnswer = `${userAnswer} ${typedAnswer}`.trim();
+
+//     const feedbackPrompt = `
+//       Question: ${mockInterviewQuestion[activeQuestionIndex]?.question}, 
+//       User Answer: ${fullAnswer}, Depends on question and user answer for given interview question.
+//       Please give us a rating (out of 10) for the answer and feedback in just 3 to 5 lines as area of improvement if any in JSON format with fields 'rating' and 'feedback'.
+//     `;
+
+//     try {
+//       const result = await chatSession.sendMessage(feedbackPrompt);
+//       const mockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
+//       const JsonFeedbackResp = JSON.parse(mockJsonResp);
+
+//       await db.insert(UserAnswer).values({
+//         mockIdRef: interviewData?.mockId,
+//         question: mockInterviewQuestion[activeQuestionIndex]?.question,
+//         correctAns: mockInterviewQuestion[activeQuestionIndex]?.answer,
+//         userAns: fullAnswer,
+//         feedback: JsonFeedbackResp?.feedback,
+//         rating: JsonFeedbackResp?.rating,
+//         userEmail: user?.primaryEmailAddress?.emailAddress,
+//         createdAt: moment().format('DD-MM-YYYY'),
+//       });
+
+//       toast("User Answer recorded successfully");
+//       setUserAnswer('');
+//       setTypedAnswer('');
+//       setResults([]);
+//     } catch (error) {
+//       console.error("Error saving answer:", error);
+//       toast.error("Failed to save the answer");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="flex items-center justify-center flex-col">
+//       {/* UI Components */}
+//       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg p-5">
+//         {/* //         <Image
+//           src={'/interviewer.png'}
+//           width={200}
+//           height={200}
+//           className="absolute"
+//         /> */}
+//         <Webcam
+//           mirrored={true}
+//           style={{
+//             height: 300,
+//             width: '100%',
+//             zIndex: 10,
+//             opacity: 0,
+//             position: 'absolute',
+//           }}
+//         />
+//         <video
+//           src={videoFile}
+//           autoPlay
+//           loop
+//           muted
+//           style={{
+//             width: '100%',
+//             borderRadius: '10px',
+//             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+//           }}
+//         ></video>
+//       </div>
+//       <Button
+//         onClick={StartStopRecording}
+//         variant="outline"
+//         className="mt-10"
+//       >
+//         {isRecording ? (
+//           <h2 className="text-red-600 flex gap-2">
+//             <Mic /> Stop Recording
+//           </h2>
+//         ) : (
+//           'Start Recording'
+//         )}
+//       </Button>
+
+//       <div className="mt-6 w-full max-w-lg">
+//         <label className="block mb-2 text-sm font-medium text-gray-700">
+//           Type Your Answer Only for MCQ or Coding Question:
+//         </label>
+//         <textarea
+//           className="w-full border rounded-md p-2 text-gray-700"
+//           rows="4"
+//           placeholder="Type your answer here..."
+//           value={typedAnswer}
+//           onChange={(e) => setTypedAnswer(e.target.value)}
+//         />
+//         <Button
+//           onClick={UpdateUserAnswer}
+//           variant="outline"
+//           className="mt-2"
+//           disabled={loading || typedAnswer.trim() === ''}
+//         >
+//           Submit
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default RecordAnswerSection;
+
+
+// "use client";
+// import { Button } from '@/components/ui/button';
+// import Image from 'next/image';
+// import React, { useEffect, useState, useRef } from 'react';
+// import Webcam from 'react-webcam';
+// import useSpeechToText from 'react-hook-speech-to-text';
+// import { Mic } from 'lucide-react';
+// import { toast } from 'sonner';
+// import { chatSession } from '@/utils/GeminiAiModel';
+// import { useUser } from '@clerk/nextjs';
+// import moment from 'moment/moment';
+// import { UserAnswer } from '@/utils/schema';
+// import { db } from '@/utils/db';
+
+// function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, interviewData }) {
+//   const [userAnswer, setUserAnswer] = useState('');
+//   const [typedAnswer, setTypedAnswer] = useState('');
+//   const { user } = useUser();
+//   const [loading, setLoading] = useState(false);
+//   const [recordingStarted, setRecordingStarted] = useState(false);
+//   const isSpeaking = useRef(false);
+//   const videoRef = useRef(null);
+
+//   const {
+//     error,
+//     interimResult,
+//     isRecording,
+//     results,
+//     startSpeechToText,
+//     stopSpeechToText,
+//     setResults,
+//   } = useSpeechToText({
+//     continuous: true,
+//     useLegacyResults: false,
+//   });
+
+//   const speakQuestion = (text) => {
+//     if ('speechSynthesis' in window && !isSpeaking.current) {
+//       const utterance = new SpeechSynthesisUtterance(text);
+//       isSpeaking.current = true;
+
+//       utterance.onstart = () => {
+//         if (videoRef.current) {
+//           videoRef.current.play();
+//         }
+//       };
+
+//       utterance.onend = () => {
+//         isSpeaking.current = false;
+//         if (videoRef.current) {
+//           videoRef.current.pause();
+//         }
+//       };
+
+//       window.speechSynthesis.speak(utterance);
+//     } else {
+//       toast.error('Text-to-speech is not supported in your browser.');
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (mockInterviewQuestion && mockInterviewQuestion.length > 0) {
+//       const currentQuestion = mockInterviewQuestion[activeQuestionIndex]?.question;
+//       if (currentQuestion) {
+//         speakQuestion(currentQuestion);
+//       }
+//     }
+//   }, [activeQuestionIndex, mockInterviewQuestion]);
+
+//   useEffect(() => {
+//     if (results.length > 0) {
+//       const newText = results.map(result => result.transcript).join(' ');
+//       setUserAnswer((prev) => prev + ' ' + newText);
+//       setResults([]);
+//     }
+//   }, [results]);
+
+//   const StartStopRecording = () => {
+//     if (isRecording || recordingStarted) {
+//       setLoading(true);
+//       stopSpeechToText();
+//       setRecordingStarted(false);
+//       UpdateUserAnswer();
+//     } else {
+//       setUserAnswer('');
+//       startSpeechToText();
+//       setRecordingStarted(true);
+//     }
+//   };
+
+//   const videoFile = "/Avtar_Video.mp4";
+
+//   const UpdateUserAnswer = async () => {
+//     setLoading(true);
+//     const fullAnswer = `${userAnswer} ${typedAnswer}`.trim();
+
+//     const feedbackPrompt = `
+//       Question: ${mockInterviewQuestion[activeQuestionIndex]?.question}, 
+//       User Answer: ${fullAnswer}, 
+//       Please give a rating (out of 10) and feedback in JSON format with fields 'rating' and 'feedback'.
+//     `;
+
+//     try {
+//       const result = await chatSession.sendMessage(feedbackPrompt);
+//       const mockJsonResp = result.response.text().replace('```json', '').replace('```', '');
+//       const JsonFeedbackResp = JSON.parse(mockJsonResp);
+
+//       await db.insert(UserAnswer).values({
+//         mockIdRef: interviewData?.mockId,
+//         question: mockInterviewQuestion[activeQuestionIndex]?.question,
+//         correctAns: mockInterviewQuestion[activeQuestionIndex]?.answer,
+//         userAns: fullAnswer,
+//         feedback: JsonFeedbackResp?.feedback,
+//         rating: JsonFeedbackResp?.rating,
+//         userEmail: user?.primaryEmailAddress?.emailAddress,
+//         createdAt: moment().format('DD-MM-YYYY'),
+//       });
+
+//       toast("User Answer recorded successfully");
+//       setUserAnswer('');
+//       setTypedAnswer('');
+//       setResults([]);
+//     } catch (error) {
+//       console.error("Error saving answer:", error);
+//       toast.error("Failed to save the answer");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="flex items-center justify-center flex-col">
+//       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg p-5">
+//         <Webcam
+//           mirrored={true}
+//           style={{
+//             height: 300,
+//             width: '100%',
+//             zIndex: 10,
+//             opacity: 0,
+//             position: 'absolute',
+//           }}
+//         />
+//         <video
+//           ref={videoRef}
+//           src={videoFile}
+//           muted
+//           style={{
+//             width: '100%',
+//             borderRadius: '10px',
+//             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+//           }}
+//         ></video>
+//       </div>
+//       <Button onClick={StartStopRecording} variant="outline" className="mt-10">
+//         {isRecording ? (
+//           <h2 className="text-red-600 flex gap-2">
+//             <Mic /> Stop Recording
+//           </h2>
+//         ) : (
+//           'Start Recording'
+//         )}
+//       </Button>
+//       <div className="mt-6 w-full max-w-lg">
+//         <label className="block mb-2 text-sm font-medium text-gray-700">
+//           Type Your Answer Only for MCQ or Coding Question:
+//         </label>
+//         <textarea
+//           className="w-full border rounded-md p-2 text-gray-700"
+//           rows="4"
+//           placeholder="Type your answer here..."
+//           value={typedAnswer}
+//           onChange={(e) => setTypedAnswer(e.target.value)}
+//         />
+//         <Button onClick={UpdateUserAnswer} variant="outline" className="mt-2" disabled={loading || typedAnswer.trim() === ''}>
+//           Submit
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default RecordAnswerSection;
+
+
+// ^^^^Main above
+
 "use client";
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import React, { useEffect, useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import useSpeechToText from 'react-hook-speech-to-text';
@@ -358,6 +738,8 @@ import { useUser } from '@clerk/nextjs';
 import moment from 'moment/moment';
 import { UserAnswer } from '@/utils/schema';
 import { db } from '@/utils/db';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, interviewData }) {
   const [userAnswer, setUserAnswer] = useState('');
@@ -365,7 +747,10 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const [recordingStarted, setRecordingStarted] = useState(false);
-  const isSpeaking = useRef(false); // Track if question is currently being spoken
+  const isSpeaking = useRef(false);
+  const mountRef = useRef(null); // Ref for Three.js canvas
+  const avatarRef = useRef(null); // Ref for the avatar
+  const faceMeshRef = useRef(null); // Ref for the face mesh
 
   const {
     error,
@@ -380,38 +765,151 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
     useLegacyResults: false,
   });
 
-  const speakQuestion = (text) => {
-    if ('speechSynthesis' in window && !isSpeaking.current) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      isSpeaking.current = true;
+  // Initialize Three.js scene
+  useEffect(() => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, 600 / 300, 0.1, 1000); // Aspect ratio based on div size
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-      utterance.onend = () => {
-        isSpeaking.current = false;
-      };
+    // Set renderer size to match the div dimensions
+    renderer.setSize(600, 300); // Width: 600px, Height: 300px
+    mountRef.current.appendChild(renderer.domElement);
 
-      window.speechSynthesis.speak(utterance);
-    } else if (!('speechSynthesis' in window)) {
-      toast.error('Text-to-speech is not supported in your browser.');
-    }
-  };
+    // Add Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+    scene.add(ambientLight);
 
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+    directionalLight.position.set(5, 10, 7.5).normalize();
+    scene.add(directionalLight);
+
+    // Load 3D GLB Model
+    const loader = new GLTFLoader();
+    loader.load(
+      "/adcetbefore2.glb",
+      (gltf) => {
+        const avatar = gltf.scene;
+
+        // Move avatar further down
+        avatar.position.set(0, -4.5, 0); // Shift avatar down
+        avatar.scale.set(4, 4, 4); // Adjust scale
+        scene.add(avatar);
+        avatarRef.current = avatar;
+
+        // Adjust Camera Position to be even closer to the avatar
+        camera.position.set(0, 2, 1.8); // Moved camera even closer by reducing the Z value further
+        camera.lookAt(0, 2, 0); // Keep camera focused on avatar's upper body
+
+        avatar.traverse((child) => {
+          if (child.isMesh && child.morphTargetDictionary) {
+            if (child.name.includes("Head")) {
+              faceMeshRef.current = child;
+            }
+          }
+        });
+      },
+      undefined,
+      (error) => console.error("❌ Error loading GLB file:", error)
+    );
+
+    // Animation Loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Handle Window Resize
+    const handleResize = () => {
+      const width = mountRef.current.clientWidth;
+      const height = mountRef.current.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+    };
+  }, []);
+
+  // Speak the current question using the avatar's speech synthesis
   useEffect(() => {
     if (mockInterviewQuestion && mockInterviewQuestion.length > 0) {
       const currentQuestion = mockInterviewQuestion[activeQuestionIndex]?.question;
       if (currentQuestion) {
-        speakQuestion(currentQuestion);
+        generateAndPlayAudio(currentQuestion);
       }
     }
   }, [activeQuestionIndex, mockInterviewQuestion]);
 
-  useEffect(() => {
-    console.log("Speech-to-text results:", results);
-    if (results.length > 0) {
-      const newText = results.map(result => result.transcript).join(' ');
-      setUserAnswer((prev) => prev + ' ' + newText);
-      setResults([]);
-    }
-  }, [results]);
+  // Generate and play audio for the avatar
+  const generateAndPlayAudio = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = speechSynthesis.getVoices();
+    utterance.voice = voices.find((voice) => voice.name === "Alex") || voices[0];
+    utterance.rate = 1.0;
+
+    // Reset lip movement
+    if (faceMeshRef.current) faceMeshRef.current.morphTargetInfluences.fill(0);
+
+    // Capture word timings
+    utterance.onboundary = (event) => {
+      if (event.name === "word") {
+        const word = text.substring(event.charIndex, event.charIndex + event.charLength);
+        syncLipMovement(word);
+      }
+    };
+
+    // Reset lips after speech ends
+    utterance.onend = () => {
+      if (faceMeshRef.current) faceMeshRef.current.morphTargetInfluences.fill(0);
+      console.log("✅ Speech Ended, Resetting Lip Sync");
+    };
+
+    speechSynthesis.speak(utterance);
+  };
+
+  // Sync lip movement with speech
+  const syncLipMovement = (word) => {
+    if (!faceMeshRef.current || !faceMeshRef.current.morphTargetDictionary) return;
+
+    const phonemeToViseme = {
+      "h": "viseme_sil", "l": "viseme_U", "e": "viseme_E", "o": "viseme_O",
+      "t": "viseme_TH", "s": "viseme_SS", "a": "viseme_aa", "m": "viseme_nn",
+      "p": "viseme_PP", "c": "viseme_CH", "n": "viseme_nn", "v": "viseme_FF",
+      "r": "viseme_RR", "d": "viseme_DD", "i": "viseme_I", "u": "viseme_U"
+    };
+
+    const phonemes = word.toLowerCase().split("");
+    let index = 0;
+
+    const animatePhonemes = () => {
+      if (index >= phonemes.length) {
+        faceMeshRef.current.morphTargetInfluences.fill(0);
+        return;
+      }
+
+      const phoneme = phonemes[index];
+      const viseme = phonemeToViseme[phoneme] || "viseme_sil";
+      const morphIndex = faceMeshRef.current.morphTargetDictionary[viseme];
+
+      if (morphIndex !== undefined) {
+        faceMeshRef.current.morphTargetInfluences.fill(0);
+        faceMeshRef.current.morphTargetInfluences[morphIndex] = 1;
+      }
+
+      index++;
+      setTimeout(animatePhonemes, 50); // Adjust timing dynamically
+    };
+
+    animatePhonemes();
+  };
 
   const StartStopRecording = () => {
     if (isRecording || recordingStarted) {
@@ -419,14 +917,12 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
       stopSpeechToText();
       setRecordingStarted(false);
       UpdateUserAnswer();
-    } else if (!isRecording && !loading && !recordingStarted) {
+    } else {
       setUserAnswer('');
       startSpeechToText();
       setRecordingStarted(true);
     }
   };
-
-  const videoFile = "/Avtar_Video.mp4";
 
   const UpdateUserAnswer = async () => {
     setLoading(true);
@@ -434,13 +930,13 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
 
     const feedbackPrompt = `
       Question: ${mockInterviewQuestion[activeQuestionIndex]?.question}, 
-      User Answer: ${fullAnswer}, Depends on question and user answer for given interview question.
-      Please give us a rating (out of 10) for the answer and feedback in just 3 to 5 lines as area of improvement if any in JSON format with fields 'rating' and 'feedback'.
+      User Answer: ${fullAnswer}, 
+      Please give a rating (out of 10) and feedback in JSON format with fields 'rating' and 'feedback'.
     `;
 
     try {
       const result = await chatSession.sendMessage(feedbackPrompt);
-      const mockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
+      const mockJsonResp = result.response.text().replace('```json', '').replace('```', '');
       const JsonFeedbackResp = JSON.parse(mockJsonResp);
 
       await db.insert(UserAnswer).values({
@@ -468,14 +964,7 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
 
   return (
     <div className="flex items-center justify-center flex-col">
-      {/* UI Components */}
       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg p-5">
-        {/* //         <Image
-          src={'/interviewer.png'}
-          width={200}
-          height={200}
-          className="absolute"
-        /> */}
         <Webcam
           mirrored={true}
           style={{
@@ -486,23 +975,17 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
             position: 'absolute',
           }}
         />
-        <video
-          src={videoFile}
-          autoPlay
-          loop
-          muted
+        <div
+          ref={mountRef}
           style={{
-            width: '100%',
+            width: '600px',
+            height: '300px',
             borderRadius: '10px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            overflow: 'hidden',
           }}
-        ></video>
+        />
       </div>
-      <Button
-        onClick={StartStopRecording}
-        variant="outline"
-        className="mt-10"
-      >
+      <Button onClick={StartStopRecording} variant="outline" className="mt-10">
         {isRecording ? (
           <h2 className="text-red-600 flex gap-2">
             <Mic /> Stop Recording
@@ -511,7 +994,6 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
           'Start Recording'
         )}
       </Button>
-
       <div className="mt-6 w-full max-w-lg">
         <label className="block mb-2 text-sm font-medium text-gray-700">
           Type Your Answer Only for MCQ or Coding Question:
@@ -523,12 +1005,7 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
           value={typedAnswer}
           onChange={(e) => setTypedAnswer(e.target.value)}
         />
-        <Button
-          onClick={UpdateUserAnswer}
-          variant="outline"
-          className="mt-2"
-          disabled={loading || typedAnswer.trim() === ''}
-        >
+        <Button onClick={UpdateUserAnswer} variant="outline" className="mt-2" disabled={loading || typedAnswer.trim() === ''}>
           Submit
         </Button>
       </div>
@@ -537,6 +1014,315 @@ function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, inter
 }
 
 export default RecordAnswerSection;
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+// import { Button } from '@/components/ui/button';
+// import React, { useEffect, useState, useRef } from 'react';
+// import Webcam from 'react-webcam';
+// import useSpeechToText from 'react-hook-speech-to-text';
+// import { Mic } from 'lucide-react';
+// import { toast } from 'sonner';
+// import { chatSession } from '@/utils/GeminiAiModel';
+// import { useUser } from '@clerk/nextjs';
+// import moment from 'moment/moment';
+// import { UserAnswer } from '@/utils/schema';
+// import { db } from '@/utils/db';
+// import * as THREE from 'three';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+// function RecordAnswerSection({ mockInterviewQuestion, activeQuestionIndex, interviewData }) {
+//   const [userAnswer, setUserAnswer] = useState('');
+//   const [typedAnswer, setTypedAnswer] = useState('');
+//   const { user } = useUser();
+//   const [loading, setLoading] = useState(false);
+//   const [recordingStarted, setRecordingStarted] = useState(false);
+//   const isSpeaking = useRef(false);
+//   const mountRef = useRef(null); // Ref for Three.js canvas
+//   const avatarRef = useRef(null); // Ref for the avatar
+//   const faceMeshRef = useRef(null); // Ref for the face mesh
+
+//   const {
+//     error,
+//     interimResult,
+//     isRecording,
+//     results,
+//     startSpeechToText,
+//     stopSpeechToText,
+//     setResults,
+//   } = useSpeechToText({
+//     continuous: true,
+//     useLegacyResults: false,
+//   });
+
+//   // Initialize Three.js scene
+//   useEffect(() => {
+//     const scene = new THREE.Scene();
+//     const camera = new THREE.PerspectiveCamera(75, 600 / 300, 0.1, 1000); // Aspect ratio based on div size
+//     const renderer = new THREE.WebGLRenderer({ antialias: true });
+
+//     // Set renderer size to match the div dimensions
+//     renderer.setSize(600, 300); // Width: 600px, Height: 300px
+//     mountRef.current.appendChild(renderer.domElement);
+
+//     // Add Lighting
+//     const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+//     scene.add(ambientLight);
+
+//     const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+//     directionalLight.position.set(5, 10, 7.5).normalize();
+//     scene.add(directionalLight);
+
+//     // Load 3D GLB Model
+//     const loader = new GLTFLoader();
+//     loader.load(
+//       "/adcetbefore2.glb",
+//       (gltf) => {
+//         const avatar = gltf.scene;
+
+//         // Move avatar further down
+//         avatar.position.set(0, -4.5, 0); // Shift avatar down
+//         avatar.scale.set(4, 4, 4); // Adjust scale
+//         scene.add(avatar);
+//         avatarRef.current = avatar;
+
+//         // Adjust Camera Position to be even closer to the avatar
+//         camera.position.set(0, 2, 1.8); // Moved camera even closer by reducing the Z value further
+//         camera.lookAt(0, 2, 0); // Keep camera focused on avatar's upper body
+
+//         avatar.traverse((child) => {
+//           if (child.isMesh && child.morphTargetDictionary) {
+//             if (child.name.includes("Head")) {
+//               faceMeshRef.current = child;
+//             }
+//           }
+//         });
+//       },
+//       undefined,
+//       (error) => console.error("❌ Error loading GLB file:", error)
+//     );
+
+//     // Animation Loop
+//     const animate = () => {
+//       requestAnimationFrame(animate);
+//       renderer.render(scene, camera);
+//     };
+//     animate();
+
+//     // Handle Window Resize
+//     const handleResize = () => {
+//       const width = mountRef.current.clientWidth;
+//       const height = mountRef.current.clientHeight;
+//       camera.aspect = width / height;
+//       camera.updateProjectionMatrix();
+//       renderer.setSize(width, height);
+//     };
+//     window.addEventListener('resize', handleResize);
+
+//     // Cleanup
+//     return () => {
+//       window.removeEventListener('resize', handleResize);
+//       if (mountRef.current && renderer.domElement) {
+//         mountRef.current.removeChild(renderer.domElement);
+//       }
+//     };
+//   }, []);
+
+//   // Speak the current question using the avatar's speech synthesis
+//   useEffect(() => {
+//     if (mockInterviewQuestion && mockInterviewQuestion.length > 0) {
+//       const currentQuestion = mockInterviewQuestion[activeQuestionIndex]?.question;
+//       if (currentQuestion) {
+//         generateAndPlayAudio(currentQuestion);
+//       }
+//     }
+//   }, [activeQuestionIndex, mockInterviewQuestion]);
+
+//   // Generate and play audio for the avatar
+//   const generateAndPlayAudio = (text) => {
+//     const utterance = new SpeechSynthesisUtterance(text);
+//     const voices = speechSynthesis.getVoices();
+//     utterance.voice = voices.find((voice) => voice.name === "Alex") || voices[0];
+//     utterance.rate = 1.0;
+
+//     // Reset lip movement
+//     if (faceMeshRef.current) faceMeshRef.current.morphTargetInfluences.fill(0);
+
+//     // Capture word timings
+//     utterance.onboundary = (event) => {
+//       if (event.name === "word") {
+//         const word = text.substring(event.charIndex, event.charIndex + event.charLength);
+//         syncLipMovement(word);
+//       }
+//     };
+
+//     // Reset lips after speech ends
+//     utterance.onend = () => {
+//       if (faceMeshRef.current) faceMeshRef.current.morphTargetInfluences.fill(0);
+//       console.log("✅ Speech Ended, Resetting Lip Sync");
+//     };
+
+//     speechSynthesis.speak(utterance);
+//   };
+
+//   // Sync lip movement with speech
+//   const syncLipMovement = (word) => {
+//     if (!faceMeshRef.current || !faceMeshRef.current.morphTargetDictionary) return;
+
+//     const phonemeToViseme = {
+//       "h": "viseme_sil", "l": "viseme_U", "e": "viseme_E", "o": "viseme_O",
+//       "t": "viseme_TH", "s": "viseme_SS", "a": "viseme_aa", "m": "viseme_nn",
+//       "p": "viseme_PP", "c": "viseme_CH", "n": "viseme_nn", "v": "viseme_FF",
+//       "r": "viseme_RR", "d": "viseme_DD", "i": "viseme_I", "u": "viseme_U"
+//     };
+
+//     const phonemes = word.toLowerCase().split("");
+//     let index = 0;
+
+//     const animatePhonemes = () => {
+//       if (index >= phonemes.length) {
+//         faceMeshRef.current.morphTargetInfluences.fill(0);
+//         return;
+//       }
+
+//       const phoneme = phonemes[index];
+//       const viseme = phonemeToViseme[phoneme] || "viseme_sil";
+//       const morphIndex = faceMeshRef.current.morphTargetDictionary[viseme];
+
+//       if (morphIndex !== undefined) {
+//         faceMeshRef.current.morphTargetInfluences.fill(0);
+//         faceMeshRef.current.morphTargetInfluences[morphIndex] = 1;
+//       }
+
+//       index++;
+//       setTimeout(animatePhonemes, 50); // Adjust timing dynamically
+//     };
+
+//     animatePhonemes();
+//   };
+
+//   const StartStopRecording = () => {
+//     if (isRecording || recordingStarted) {
+//       setLoading(true);
+//       stopSpeechToText();
+//       setRecordingStarted(false);
+//       UpdateUserAnswer();
+//     } else {
+//       setUserAnswer('');
+//       startSpeechToText();
+//       setRecordingStarted(true);
+//     }
+//   };
+
+//   const UpdateUserAnswer = async () => {
+//     setLoading(true);
+//     const fullAnswer = `${userAnswer} ${typedAnswer}`.trim();
+
+//     const feedbackPrompt = `
+//        Question: ${mockInterviewQuestion[activeQuestionIndex]?.question},
+//        User Answer: ${fullAnswer},
+//        Please give a rating (out of 10) and feedback in JSON format with fields 'rating' and 'feedback'.`;
+
+//     try {
+//       const result = await chatSession.sendMessage(feedbackPrompt);
+//       const mockJsonResp = result.response.text().replace('json', '').replace('', '');
+//       const JsonFeedbackResp = JSON.parse(mockJsonResp);
+
+//       await db.insert(UserAnswer).values({
+//         mockIdRef: interviewData?.mockId,
+//         question: mockInterviewQuestion[activeQuestionIndex]?.question,
+//         correctAns: mockInterviewQuestion[activeQuestionIndex]?.answer,
+//         userAns: fullAnswer,
+//         feedback: JsonFeedbackResp?.feedback,
+//         rating: JsonFeedbackResp?.rating,
+//         userEmail: user?.primaryEmailAddress?.emailAddress,
+//         createdAt: moment().format('DD-MM-YYYY'),
+//       });
+
+//       toast("User Answer recorded successfully");
+//       setUserAnswer('');
+//       setTypedAnswer('');
+//       setResults([]);
+//     } catch (error) {
+//       console.error("Error saving answer:", error);
+//       toast.error("Failed to save the answer");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="flex items-center justify-center flex-col">
+//       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg p-5">
+//         <Webcam
+//           mirrored={true}
+//           style={{
+//             height: 300,
+//             width: '100%',
+//             zIndex: 10,
+//             opacity: 0,
+//             position: 'absolute',
+//           }}
+//         />
+//         <div
+//           ref={mountRef}
+//           style={{
+//             width: '600px',
+//             height: '300px',
+//             borderRadius: '10px',
+//             overflow: 'hidden',
+//           }}
+//         />
+//       </div>
+//       <Button onClick={StartStopRecording} variant="outline" className="mt-10">
+//         {isRecording ? (
+//           <h2 className="text-red-600 flex gap-2">
+//             <Mic /> Stop Recording
+//           </h2>
+//         ) : (
+//           'Start Recording'
+//         )}
+//       </Button>
+//       <div className="mt-6 w-full max-w-lg">
+//         <label className="block mb-2 text-sm font-medium text-gray-700">
+//           Type Your Answer Only for MCQ or Coding Question:
+//         </label>
+//         <textarea
+//           className="w-full border rounded-md p-2 text-gray-700"
+//           rows="4"
+//           placeholder="Type your answer here..."
+//           value={typedAnswer}
+//           onChange={(e) => setTypedAnswer(e.target.value)}
+//         />
+//         <Button onClick={UpdateUserAnswer} variant="outline" className="mt-2" disabled={loading || typedAnswer.trim() === ''}>
+//           Submit
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default RecordAnswerSection;
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,130 +1,134 @@
-// "use client"
-// import React, { useState } from 'react'
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog"
-// import { Button } from '@/components/ui/button'
-// import { Input } from '@/components/ui/input'
-// import { Textarea } from '@/components/ui/textarea'
-// import { Label } from "@/components/ui/label"
-// import { chatSession } from '@/utils/GeminiAiModel'
-// import { LoaderCircle } from 'lucide-react'
-// import { MockInterview } from '@/utils/schema'
-// import { v4 as uuidv4 } from 'uuid'
-// import { useUser } from '@clerk/nextjs'
-// import moment from 'moment/moment'
-// import { db } from '@/utils/db'
-// import { useRouter } from 'next/navigation'
+// // "use client"
+// // import React, { useState } from 'react'
+// // import {
+// //   Dialog,
+// //   DialogContent,
+// //   DialogDescription,
+// //   DialogHeader,
+// //   DialogTitle,
+// //   DialogTrigger,
+// // } from "@/components/ui/dialog"
+// // import { Button } from '@/components/ui/button'
+// // import { Input } from '@/components/ui/input'
+// // import { Textarea } from '@/components/ui/textarea'
+// // import { Label } from "@/components/ui/label"
+// // import { chatSession } from '@/utils/GeminiAiModel'
+// // import { LoaderCircle } from 'lucide-react'
+// // import { MockInterview } from '@/utils/schema'
+// // import { v4 as uuidv4 } from 'uuid'
+// // import { useUser } from '@clerk/nextjs'
+// // import moment from 'moment/moment'
+// // import { db } from '@/utils/db'
+// // import { useRouter } from 'next/navigation'
 
-// function AddNewInterview() {
-//   const [openDailog, setOpenDialog] = useState(false)
-//   const [jobPosition, setJobPosition] = useState();
-//   const [jobDesc, setJobDesc] = useState();
-//   const [jobExperience, setjobExperience] = useState();
-//   const [jobResume, setjobResume] = useState();
-//   const [loading, setLoading] = useState(false);
-//   const [jsonResponse, setJsonResponse] = useState([]);
-//   const { user } = useUser();
-//   const router = useRouter();
-//   const onSubmit = async (e) => {
-//     setLoading(true)
-//     e.preventDefault();
-//     console.log(jobPosition, jobDesc, jobExperience, jobResume);
+// // function AddNewInterview() {
+// //   const [openDailog, setOpenDialog] = useState(false)
+// //   const [jobPosition, setJobPosition] = useState();
+// //   const [jobDesc, setJobDesc] = useState();
+// //   const [jobExperience, setjobExperience] = useState();
+// //   const [jobResume, setjobResume] = useState();
+// //   const [loading, setLoading] = useState(false);
+// //   const [jsonResponse, setJsonResponse] = useState([]);
+// //   const { user } = useUser();
+// //   const router = useRouter();
+// //   const onSubmit = async (e) => {
+// //     setLoading(true)
+// //     e.preventDefault();
+// //     console.log(jobPosition, jobDesc, jobExperience, jobResume);
 
-//     const InputPrompt = "Job position:" + jobPosition + ", Job Description:" + jobDesc + ", Years of Experience: " + jobExperience + ",Depends on job position, Job Description, Years of Experience" + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview question along with Answers in JSON format. Give us question and answer as field on JSON. Dont give any extra information or explaination"
+// //     const InputPrompt = "Job position:" + jobPosition + ", Job Description:" + jobDesc + ", Years of Experience: " + jobExperience + ",Depends on job position, Job Description, Years of Experience" + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview question along with Answers in JSON format. Give us question and answer as field on JSON. Dont give any extra information or explaination"
 
-//     // const InputPrompt = "Job position:" + jobPosition + ", Job Description:" + jobDesc + ", Years of Experience: " + jobExperience + ",Depends on job position, Job Description, Years of Experience" + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview question along with Answers in JSON format nd Please ensure to give atleast 3 MCQ questions along with options & if coding related field is there then atleast 2 question on output based code question with options. Give us question and answer as field on JSON. Dont give any extra information or explaination"
-//     a
+// //     // const InputPrompt = "Job position:" + jobPosition + ", Job Description:" + jobDesc + ", Years of Experience: " + jobExperience + ",Depends on job position, Job Description, Years of Experience" + process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT + " interview question along with Answers in JSON format nd Please ensure to give atleast 3 MCQ questions along with options & if coding related field is there then atleast 2 question on output based code question with options. Give us question and answer as field on JSON. Dont give any extra information or explaination"
+// //     a
 
-//     const result = await chatSession.sendMessage(InputPrompt);
-//     console.log(result);
-//     const MockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
-//     // const MockJsonResp = (result.response.text()).replace(/```json/g, '').replace(/```/g, '')
-//     //   .trim();
-//     console.log(JSON.parse(MockJsonResp));
-//     // console.log(result.response.text());
+// //     const result = await chatSession.sendMessage(InputPrompt);
+// //     console.log(result);
+// //     const MockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
+// //     // const MockJsonResp = (result.response.text()).replace(/```json/g, '').replace(/```/g, '')
+// //     //   .trim();
+// //     console.log(JSON.parse(MockJsonResp));
+// //     // console.log(result.response.text());
 
-//     setJsonResponse(MockJsonResp);
+// //     setJsonResponse(MockJsonResp);
 
-//     if (MockJsonResp) {
+// //     if (MockJsonResp) {
 
-//       const resp = await db.insert(MockInterview).values({
-//         mockId: uuidv4(),
-//         jsonMockResp: MockJsonResp,
-//         jobPosition: jobPosition,
-//         jobDesc: jobDesc,
-//         jobExperience: jobExperience,
-//         jobResume: jobResume,
-//         createdBy: user?.primaryEmailAddress?.emailAddress,
-//         createdAt: moment().format('DD-MM-YYYY'),
-//       }).returning({ mockId: MockInterview.mockId })
-//       console.log("Inserted Id:", resp);
-//       if (resp) {
-//         setOpenDialog(false);
-//         router.push('/dashboard/interview/' + resp[0]?.mockId)
-//       }
-//     }
-//     else {
-//       console.log("ERROR");
-//     }
-//     setLoading(false);
-//   }
-//   return (
-//     <div>
-//       <div className='p-10 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={() => setOpenDialog(true)}>
-//         <h2 className='text-lg text-center'>+ Add New</h2>
-//       </div>
-//       <Dialog open={openDailog}>
-//         <DialogContent className="max-w-2xl">
-//           <DialogHeader>
-//             <DialogTitle className='text-2xl'>Tell to VirtuHire more about your job Interviwing</DialogTitle>
-//             <DialogDescription>
-//               <form onSubmit={onSubmit}>
-//                 <div>
-//                   <h2>Add Details about your job role/position, Job Description, years of Experience and Resume</h2>
-//                   <div className='mt-7 my-3'>
-//                     <label>Job Role/Job Position</label>
-//                     <Input placeholder="Ex. Full Stack Developer" required onChange={(event) => setJobPosition(event.target.value)} />
-//                   </div>
-//                   <div className='mt-7 my-3'>
-//                     <label>Job Description/ Tech Stack (In Short)</label>
-//                     <Textarea placeholder="Ex. React, Next Js, Angular Js, Java Full Stack etc." required onChange={(event) => setJobDesc(event.target.value)} />
-//                   </div>
-//                   <div className='mt-7 my-3'>
-//                     <label>Years of Experience</label>
-//                     <Input placeholder="2" type="number" max="100" required onChange={(event) => setjobExperience(event.target.value)} />
-//                   </div>
-//                   <div className="mt-7 my-3">
-//                     <Label htmlFor="picture">Upload Your Resume</Label>
-//                     <Input id="picture" type="file" onChange={(event) => setjobResume(event.target.value)} />
-//                   </div>
-//                 </div>
-//                 <div className='flex gap-5 justify-end'>
-//                   <Button type="button" variant="ghost" onClick={() => setOpenDialog(false)}>Cancel</Button>
-//                   <Button type="submit" disabled={loading}>
-//                     {loading ?
-//                       <>
-//                         <LoaderCircle className='animate-spin' />'Generating From AI-VirtuHire'</>
-//                       : 'Start Interview'}
-//                   </Button>
-//                 </div>
-//               </form>
-//             </DialogDescription>
-//           </DialogHeader>
-//         </DialogContent>
-//       </Dialog>
+// //       const resp = await db.insert(MockInterview).values({
+// //         mockId: uuidv4(),
+// //         jsonMockResp: MockJsonResp,
+// //         jobPosition: jobPosition,
+// //         jobDesc: jobDesc,
+// //         jobExperience: jobExperience,
+// //         jobResume: jobResume,
+// //         createdBy: user?.primaryEmailAddress?.emailAddress,
+// //         createdAt: moment().format('DD-MM-YYYY'),
+// //       }).returning({ mockId: MockInterview.mockId })
+// //       console.log("Inserted Id:", resp);
+// //       if (resp) {
+// //         setOpenDialog(false);
+// //         router.push('/dashboard/interview/' + resp[0]?.mockId)
+// //       }
+// //     }
+// //     else {
+// //       console.log("ERROR");
+// //     }
+// //     setLoading(false);
+// //   }
+// //   return (
+// //     <div>
+// //       <div className='p-10 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all' onClick={() => setOpenDialog(true)}>
+// //         <h2 className='text-lg text-center'>+ Add New</h2>
+// //       </div>
+// //       <Dialog open={openDailog}>
+// //         <DialogContent className="max-w-2xl">
+// //           <DialogHeader>
+// //             <DialogTitle className='text-2xl'>Tell to VirtuHire more about your job Interviwing</DialogTitle>
+// //             <DialogDescription>
+// //               <form onSubmit={onSubmit}>
+// //                 <div>
+// //                   <h2>Add Details about your job role/position, Job Description, years of Experience and Resume</h2>
+// //                   <div className='mt-7 my-3'>
+// //                     <label>Job Role/Job Position</label>
+// //                     <Input placeholder="Ex. Full Stack Developer" required onChange={(event) => setJobPosition(event.target.value)} />
+// //                   </div>
+// //                   <div className='mt-7 my-3'>
+// //                     <label>Job Description/ Tech Stack (In Short)</label>
+// //                     <Textarea placeholder="Ex. React, Next Js, Angular Js, Java Full Stack etc." required onChange={(event) => setJobDesc(event.target.value)} />
+// //                   </div>
+// //                   <div className='mt-7 my-3'>
+// //                     <label>Years of Experience</label>
+// //                     <Input placeholder="2" type="number" max="100" required onChange={(event) => setjobExperience(event.target.value)} />
+// //                   </div>
+// //                   <div className="mt-7 my-3">
+// //                     <Label htmlFor="picture">Upload Your Resume</Label>
+// //                     <Input id="picture" type="file" onChange={(event) => setjobResume(event.target.value)} />
+// //                   </div>
+// //                 </div>
+// //                 <div className='flex gap-5 justify-end'>
+// //                   <Button type="button" variant="ghost" onClick={() => setOpenDialog(false)}>Cancel</Button>
+// //                   <Button type="submit" disabled={loading}>
+// //                     {loading ?
+// //                       <>
+// //                         <LoaderCircle className='animate-spin' />'Generating From AI-VirtuHire'</>
+// //                       : 'Start Interview'}
+// //                   </Button>
+// //                 </div>
+// //               </form>
+// //             </DialogDescription>
+// //           </DialogHeader>
+// //         </DialogContent>
+// //       </Dialog>
 
-//     </div>
-//   )
-// }
+// //     </div>
+// //   )
+// // }
 
-// export default AddNewInterview
+// // export default AddNewInterview
 
+
+
+
+// // Working 27 Feb 2025 ++MAIN
 
 
 "use client";
@@ -167,11 +171,13 @@ function AddNewInterview() {
     // const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDesc}, Years of Experience: ${jobExperience}.Depends on job position, Job Description, Years of Experience Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT},interview question with 1 aptitude related and 1 coding related question with 4 options in Same line without any extra line space along with Answers in JSON format.Give us question and answer as field on JSON. Dont give any extra information or explaination.Generate in this format eg.: [  {    "question": "Explain the difference between a list and a tuple in Python.  ***<Options> a)  b)  c)  d) *** (This options is only for Aptitude and output based question)",    "answer": "Lists are mutable, meaning they can be modified after creation. Tuples are immutable, meaning they cannot be changed after creation."  }]`;
 
 
-    const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDesc}, Years of Experience: ${jobExperience}.Depends on job position, Job Description, Years of Experience Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT},interview question with 2 aptitude related and 1 coding related question with 4 options(only for output based question) in Same line without any extra line space along with Answers in JSON format.Give us question and answer as field on JSON. Dont give any extra information or explaination.Generate in this format eg.: [  {    "question": "Explain the difference between a list and a tuple in Python.",  "answer": "Lists are mutable, meaning they can be modified after creation. Tuples are immutable, meaning they cannot be changed after creation."  }] and for aptitude,coding and coding output based question(coding question is only for developer related field/job and for other field/job generate logical based question) is in this format: [{"question": "You have 100 coins laying flat on a table, each with a head side and a tail side. 10 of them are heads up. You can't see or feel the coins, but you can flip them over one at a time. How many flips do you need to guarantee that all coins are heads up?","options": ["10", "50", "90", "100"],"answer": "90"}] (this is sample question generate different question in this format)`;
+    // const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDesc}, Years of Experience: ${jobExperience}.Depends on job position, Job Description, Years of Experience Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT},interview question with 2 aptitude related and 1 coding related question with 4 options(only for output based question) in Same line without any extra line space along with Answers in JSON format.Give us question and answer as field on JSON. Dont give any extra information or explaination.Generate in this format eg.: [  {    "question": "Explain the difference between a list and a tuple in Python.",  "answer": "Lists are mutable, meaning they can be modified after creation. Tuples are immutable, meaning they cannot be changed after creation."  }] and for aptitude,coding and coding output based question(coding question is only for developer related field/job and for other field/job generate logical based question) is in this format: [{"question": "You have 100 coins laying flat on a table, each with a head side and a tail side. 10 of them are heads up. You can't see or feel the coins, but you can flip them over one at a time. How many flips do you need to guarantee that all coins are heads up?","options": ["10", "50", "90", "100"],"answer": "90"}] (this is sample question generate different question in this format)`;
+
+    const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDesc}, Years of Experience: ${jobExperience}.Depends on job position, Job Description, Years of Experience. Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT},interview question totally based on Job position Job Description and Years of Experience(Don't generate any irrelevant question out of this fields) in Same line without any extra line space along with Answers in JSON format.Give us question and answer as field on JSON. Dont give any extra information or explaination.`;
 
     const result = await chatSession.sendMessage(InputPrompt);
     console.log(result);
-    const MockJsonResp = (await result.response.text()).replace('```json', '').replace('```', '');
+    const MockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
 
     if (MockJsonResp) {
       const resp = await db.insert(MockInterview).values({
@@ -183,6 +189,7 @@ function AddNewInterview() {
         jobResume,
         createdBy: user?.primaryEmailAddress?.emailAddress,
         createdAt: moment().format('DD-MM-YYYY'),
+        timeOfCreation: moment().format('HH:mm:ss'), // Full timestamp
       }).returning({ mockId: MockInterview.mockId });
 
       if (resp) {
@@ -200,27 +207,14 @@ function AddNewInterview() {
     router.push('/dashboard/resume'); // Adjust this path to match your ATS page's route
   };
 
+  const handleSkillsClick = () => {
+    router.push('/dashboard/skillsCheck'); // Adjust this path to match your ATS page's route
+  }
+
   // >>Demo End
 
   return (
     <div>
-      {/* Add New Button */}
-      {/* <div
-        className="p-10 border rounded-lg bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
-        onClick={() => setOpenDialog(true)}
-      >
-        <h2 className="text-lg text-center font-semibold">Start New Interview by One Click</h2>
-        <p className="mt-2 text-center text-sm">Create questions based on job roles, experience, and more!</p>
-      </div>
-
-      <div
-        className="p-10 border rounded-lg bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg"
-        onClick={() => setOpenDialog(true)}
-      >
-        <h2 className="text-lg text-center font-semibold">Start New Interview by One Click</h2>
-        <p className="mt-2 text-center text-sm">Create questions based on job roles, experience, and more!</p>
-      </div> */}
-
       {/* ///Demo Start */}
       <div className="flex gap-4">
         <div
@@ -238,6 +232,15 @@ function AddNewInterview() {
           <h2 className="text-lg text-center font-semibold">Check Your ATS Resume Score</h2>
           <p className="mt-2 text-center text-sm">Generate resume Matching percentage instantly!</p>
         </div>
+
+        <div
+          className="flex-1 min-w-[350px] p-10 border rounded-lg bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 text-white hover:scale-105 transition-transform duration-300 cursor-pointer shadow-lg ml-20"
+          onClick={handleSkillsClick} // Navigate to the Skills Check page on click
+        >
+          <h2 className="text-lg text-center font-semibold">Check Matching Job Profiles & Required Skills</h2>
+          <p className="mt-2 text-center text-sm">Find jobs that match your skills and learn what to improve!</p>
+        </div>
+
       </div>
 
       {/* ///Demo End */}
@@ -327,6 +330,7 @@ function AddNewInterview() {
 }
 
 export default AddNewInterview;
+
 
 
 

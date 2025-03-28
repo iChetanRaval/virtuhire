@@ -191,7 +191,6 @@ function QuestionsSection({ mockInterviewQuestion, mockInterviewOptions, activeQ
           </h2>
         ))}
       </div>
-
       <div className="flex items-center justify-between mb-6">
         <h2 className='text-lg md:text-xl font-semibold'>{mockInterviewQuestion[activeQuestionIndex]?.question}</h2>
         <Volume2

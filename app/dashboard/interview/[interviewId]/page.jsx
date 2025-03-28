@@ -322,6 +322,13 @@
 // export default Interview;
 
 
+
+
+
+
+// ---Main Code---
+
+
 "use client";
 import { Button } from '@/components/ui/button';
 import { db } from '@/utils/db';
@@ -372,7 +379,7 @@ function Interview(params) {
       console.error("Error starting detection:", error);
     }
   };
-  const atsScore = Math.floor(Math.random() * (85 - 70 + 1)) + 70; // Random number between 70-85
+  // const atsScore = Math.floor(Math.random() * (85 - 70 + 1)) + 70; // Random number between 70-85
 
   return (
     <div className="my-10">
@@ -388,7 +395,7 @@ function Interview(params) {
             <h2 className="text-lg"><strong>Resume:</strong> {interviewData.jobResume}</h2>
 
 
-            <h2 className="text-lg"><strong>ATS Score of Resume:</strong> {atsScore}</h2>
+            {/* <h2 className="text-lg"><strong>ATS Score of Resume:</strong> {atsScore}</h2> */}
 
           </div>
           <div className="p-5 border rounded-lg border-orange-300 bg-orange-200">

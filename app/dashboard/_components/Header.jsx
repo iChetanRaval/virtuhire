@@ -276,7 +276,7 @@ function Header({ searchTerm, setSearchTerm }) {
 
   return (
     <div className='flex p-3 items-center justify-between bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 shadow-md'>
-      <Image src={'/image1.png'} width={200} height={12} alt='logo' className='ml-3' />
+      <Image src={'/image1.png'} width={160} height={12} alt='logo' className='ml-3' />
 
       {/* Search Bar */}
       {/* <form onSubmit={handleSearch} className="flex items-center w-1/3">
@@ -295,7 +295,7 @@ function Header({ searchTerm, setSearchTerm }) {
         </Button>
       </form> */}
 
-      <ul className='hidden md:flex gap-8 relative'>
+      <ul className='hidden md:flex gap-6 relative'>
         {/* ... (rest of the code remains the same) ... */}
         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard' && 'text-primary font-bold'}`}>
           <Link href="/dashboard">Dashboard</Link>
@@ -351,6 +351,12 @@ function Header({ searchTerm, setSearchTerm }) {
         <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path === '/dashboard/skillsCheck' && 'text-primary font-bold'}`}>
           <Link href="/dashboard/skillsCheck">Find Job Profiles</Link>
         </li>
+
+        {/* Tesing Purpose  */}
+        <li className={`hover:text-primary hover:font-bold transition-all cursor-pointer text-lg ${path == '/dashboard/mentor-support' && 'text-primary font-bold'}`}>
+          <Link href={"/dashboard/mentor-support"}>Mentor Support</Link>
+        </li>
+
 
       </ul>
       <UserButton />

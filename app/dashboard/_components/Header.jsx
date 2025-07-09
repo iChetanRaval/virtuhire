@@ -271,7 +271,7 @@ function Header({ searchTerm, setSearchTerm }) {
   const handleSearch = (e) => {
     e.preventDefault();
     // Trigger search functionality
-    console.log('Search term:', searchTerm);
+    // console.log('Search term:', searchTerm);
   };
 
   return (

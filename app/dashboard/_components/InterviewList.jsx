@@ -81,7 +81,7 @@ function InterviewList({ searchTerm = '' }) { // Default value for searchTerm
         .where(eq(MockInterview.createdBy, user?.primaryEmailAddress?.emailAddress))
         .orderBy(desc(MockInterview.id));
 
-      console.log('Fetched Interviews:', result); // Log the data
+      // console.log('Fetched Interviews:', result); // Log the data
       setInterviewList(result);
       setFilteredInterviews(result); // Initialize filteredInterviews with all interviews
     } catch (err) {

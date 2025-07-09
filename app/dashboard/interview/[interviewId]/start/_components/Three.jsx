@@ -41,8 +41,8 @@ const AvatarComponent = ({ currentQuestion }) => {
           if (child.isMesh && child.morphTargetDictionary) {
             if (child.name.includes("Head")) {
               faceMesh = child;
-              console.log("✅ Face Mesh Selected:", faceMesh.name);
-              console.log("✅ Available Blend Shapes:", Object.keys(child.morphTargetDictionary));
+              // console.log("✅ Face Mesh Selected:", faceMesh.name);
+              // console.log("✅ Available Blend Shapes:", Object.keys(child.morphTargetDictionary));
             }
           }
         });
@@ -51,7 +51,7 @@ const AvatarComponent = ({ currentQuestion }) => {
           console.error("❌ No valid face mesh found with blend shapes.");
         }
 
-        console.log("✅ Model Loaded:", avatar);
+        // console.log("✅ Model Loaded:", avatar);
       },
       undefined,
       (error) => console.error("❌ Error loading GLB file:", error)

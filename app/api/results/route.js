@@ -33,6 +33,7 @@ export async function GET() {
       photoUrl: "/Vivek_Image.jpg",
     },
   ];
+  
 
   return new Response(JSON.stringify(results), { status: 200 });
 }

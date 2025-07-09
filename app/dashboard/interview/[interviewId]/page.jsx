@@ -351,7 +351,7 @@ function Interview(params) {
   const [isInterviewStarted, setIsInterviewStarted] = useState(false);
 
   useEffect(() => {
-    console.log(params.params.interviewId);
+    // console.log(params.params.interviewId);
     GetInterviewDetails();
   }, []);
 
@@ -371,7 +371,7 @@ function Interview(params) {
     try {
       const response = await fetch('http://localhost:8000/start_detection'); // Your Python API endpoint
       const data = await response.json();
-      console.log("Detection status:", data.status);
+      // console.log("Detection status:", data.status);
 
       // Start the interview video
       setIsInterviewStarted(true);

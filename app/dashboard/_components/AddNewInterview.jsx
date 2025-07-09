@@ -176,7 +176,7 @@ function AddNewInterview() {
     const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDesc}, Years of Experience: ${jobExperience}.Depends on job position, Job Description, Years of Experience. Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT},interview question totally based on Job position Job Description and Years of Experience(Don't generate any irrelevant question out of this fields) in Same line without any extra line space along with Answers in JSON format. Based on Years of Experience decide the difficulty level of questions. Give us question and answer as field on JSON. Dont give any extra information or explaination. Create 2 MCQ questions with options totally based on ${jobPosition} and ${jobDesc} in this format: [{"question": "You have 100 memory addresses, 10 of which contain a specific error flag. You can inspect and clear the flag one address at a time. What is the minimum number of inspections required to guarantee all error flags are cleared?","options": ["10", "50", "90", "100"],"answer": "90"}]`;
 
     const result = await chatSession.sendMessage(InputPrompt);
-    console.log(result);
+    // console.log(result);
     const MockJsonResp = (result.response.text()).replace('```json', '').replace('```', '');
 
     if (MockJsonResp) {

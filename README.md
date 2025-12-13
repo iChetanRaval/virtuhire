@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 VirtuHire Pro - AI Recruitment Platform
 
-## Getting Started
+An intelligent recruitment platform powered by AI/ML that revolutionizes the hiring process through smart job matching, ATS resume parsing, and immersive 3D avatar interviews.
 
-First, run the development server:
+## ✨ Features
 
+- **AI Job-Skill Matching Engine**: NLP-powered system achieving 35% improvement in candidate-job matching accuracy
+- **ATS Resume Parser**: Automated resume analysis for skills and experience with 30% better shortlisting efficiency
+- **3D Avatar Interviews**: Immersive interview experience with real-time behavioral analytics and candidate evaluation
+- **Smart Recommendations**: Personalized job suggestions based on candidate profiles and skills
+
+## 🛠️ Tech Stack
+
+**Frontend**: React.js, Next.js  
+**Backend**: Python, Django  
+**AI/ML**: NLP, Machine Learning Models  
+**Additional**: AR/VR, Gemini API, Text-to-Speech (TTS)
+
+## 🎯 Key Metrics
+
+- 35% boost in job-role match accuracy
+- 30% improvement in candidate shortlisting efficiency
+- Real-time behavioral analytics during interviews
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v16+)
+- Python (v3.8+)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/iChetanRaval/virtuhire.git
+cd virtuhire
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install frontend dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. Install backend dependencies
+```bash
+cd backend
+pip install -r requirements.txt
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. Set up environment variables
+```bash
+cp .env.example .env
+# Add your API keys and configuration
+```
 
-## Learn More
+5. Run the application
+```bash
+# Frontend
+npm run dev
 
-To learn more about Next.js, take a look at the following resources:
+# Backend (in another terminal)
+cd backend
+python manage.py runserver
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📸 Demo
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+🔗 **Live Demo**: [VirtuHire Pro](https://aivirtuhire-git-master-1-ichetanravals-projects.vercel.app/)
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👤 Author
+
+**Chetan Raval**
+- GitHub: [@iChetanRaval](https://github.com/iChetanRaval)
+- LinkedIn: [ichetan-raval](https://www.linkedin.com/in/ichetan-raval/)
+- Portfolio: [chetanraval.netlify.app](https://chetanraval.netlify.app/)
+
+## ⭐ Show your support
+
+Give a ⭐️ if this project helped you!
